@@ -1,0 +1,25 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20250508102903
+Username: HCSS\Jake.Simpson
+RunAs User: HCSS\Jake.Simpson
+Configuration Name: 
+Machine: JAKESIM-LT2 (Microsoft Windows NT 10.0.22631.0)
+Host Application: powershell -NoProfile -ExecutionPolicy Bypass -File MoveEstimates.ps1 -TemplateDirectory C:\Users\jake.simpson\Downloads -DryRun
+Process ID: 12864
+PSVersion: 5.1.22621.4391
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.4391
+BuildVersion: 10.0.22621.4391
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is MoveFolders_Log_20250508_102903.txt
+PS>TerminatingError(Import-Excel): "Cannot bind argument to parameter 'Path' because it is null."
+âŒ Error importing Excel file: Cannot bind argument to parameter 'Path' because it is null.
+**********************
+Windows PowerShell transcript end
+End time: 20250508102903
+**********************
