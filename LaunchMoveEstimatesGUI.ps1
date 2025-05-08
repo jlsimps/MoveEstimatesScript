@@ -58,7 +58,7 @@ $runButton.Add_Click({
     }
 
     # Call the main script
-    powershell -NoProfile -ExecutionPolicy Bypass -File "MoveEstimates.ps1" $args
+    powershell -NoProfile -ExecutionPolicy Bypass -File "MoveEstimates.ps1" $paramArgs
     $form.Close()
 })
 $form.Controls.Add($runButton)
