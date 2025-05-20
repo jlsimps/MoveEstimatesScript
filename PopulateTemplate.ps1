@@ -1,7 +1,21 @@
+param (
+    [Parameter(Mandatory = $true)]
+    [string]$TemplateDirectory,
+
+    [Parameter(Mandatory = $true)]
+    [string]$EstDirectory
+)
+
 # Path to EST folder and the Excel template
-$estDir = "C:\HeavyBidClass\EST"
-$templatePath = "C:\Users\jake.simpson\Desktop\SUPPORT STUFF\MoveEstimatesScript\PowerShell_Template.xlsx"
+$estDir = $EstDirectory
+$templatePath = Join-Path -Path $TemplateDirectory -ChildPath "PowerShell_Template.xlsx"
 $sheetName = "Sheet1"
+
+# Validate paths
+if (-not (Test-Path $templatePath)) {
+    Write-Host "[ERROR] Excel file not found at: $templatePath"
+    exit 1
+}
 
 # Get list of estimate folders
 $folders = Get-ChildItem -Path $estDir -Directory
