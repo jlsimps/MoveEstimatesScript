@@ -4,51 +4,99 @@ Add-Type -AssemblyName System.Windows.Forms
 # --- Create the form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Move Estimates Launcher"
-$form.Size = New-Object System.Drawing.Size(550,220)
+$form.Size = New-Object System.Drawing.Size(550, 330)
 $form.StartPosition = "CenterScreen"
 
-# --- Label for folder path
-$label = New-Object System.Windows.Forms.Label
-$label.Text = "Select Template Directory:"
-$label.Location = New-Object System.Drawing.Point(10,20)
-$label.Size = New-Object System.Drawing.Size(200,20)
-$form.Controls.Add($label)
+# === TEMPLATE SECTION ===
 
-# --- Textbox for folder path
-$textBox = New-Object System.Windows.Forms.TextBox
-$textBox.Location = New-Object System.Drawing.Point(10,45)
-$textBox.Size = New-Object System.Drawing.Size(350,20)
-$form.Controls.Add($textBox)
+# Template directory label
+$labelTemplate = New-Object System.Windows.Forms.Label
+$labelTemplate.Text = "Select Directory where PowerShell_Template.xlsx is located:"
+$labelTemplate.Location = New-Object System.Drawing.Point(10, 20)
+$labelTemplate.Size = New-Object System.Drawing.Size(200, 20)
+$form.Controls.Add($labelTemplate)
 
-# --- Browse button
-$browseButton = New-Object System.Windows.Forms.Button
-$browseButton.Text = "Browse"
-$browseButton.Location = New-Object System.Drawing.Point(370,43)
-$browseButton.Add_Click({
+# Template directory textbox
+$textBoxTemplate = New-Object System.Windows.Forms.TextBox
+$textBoxTemplate.Location = New-Object System.Drawing.Point(10, 45)
+$textBoxTemplate.Size = New-Object System.Drawing.Size(350, 20)
+$form.Controls.Add($textBoxTemplate)
+
+# Browse button for template directory
+$browseButtonTemplate = New-Object System.Windows.Forms.Button
+$browseButtonTemplate.Text = "Browse"
+$browseButtonTemplate.Location = New-Object System.Drawing.Point(370, 43)
+$browseButtonTemplate.Add_Click({
     $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
     if ($folderBrowser.ShowDialog() -eq "OK") {
-        $textBox.Text = $folderBrowser.SelectedPath
+        $textBoxTemplate.Text = $folderBrowser.SelectedPath
     }
 })
-$form.Controls.Add($browseButton)
+$form.Controls.Add($browseButtonTemplate)
 
-# --- Dry Run checkbox
+# EST directory label
+$labelEST = New-Object System.Windows.Forms.Label
+$labelEST.Text = "Select EST Directory:"
+$labelEST.Location = New-Object System.Drawing.Point(10, 80)
+$labelEST.Size = New-Object System.Drawing.Size(200, 20)
+$form.Controls.Add($labelEST)
+
+# EST directory textbox
+$textBoxEST = New-Object System.Windows.Forms.TextBox
+$textBoxEST.Location = New-Object System.Drawing.Point(10, 105)
+$textBoxEST.Size = New-Object System.Drawing.Size(350, 20)
+$form.Controls.Add($textBoxEST)
+
+# Browse button for EST directory
+$browseButtonEST = New-Object System.Windows.Forms.Button
+$browseButtonEST.Text = "Browse"
+$browseButtonEST.Location = New-Object System.Drawing.Point(370, 103)
+$browseButtonEST.Add_Click({
+    $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
+    if ($folderBrowser.ShowDialog() -eq "OK") {
+        $textBoxEST.Text = $folderBrowser.SelectedPath
+    }
+})
+$form.Controls.Add($browseButtonEST)
+
+# Generate Template button
+$generateButton = New-Object System.Windows.Forms.Button
+$generateButton.Text = "Generate Template"
+$generateButton.Location = New-Object System.Drawing.Point(10, 140)
+$generateButton.Size = New-Object System.Drawing.Size(150, 30)
+$generateButton.Add_Click({
+    $templateDir = $textBoxTemplate.Text
+    $estDir = $textBoxEST.Text
+
+    if (-not (Test-Path $templateDir) -or -not (Test-Path $estDir)) {
+        [System.Windows.Forms.MessageBox]::Show("Please select valid paths for both the template and EST directory.", "Error", "OK", "Error")
+        return
+    }
+
+    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSScriptRoot\PopulateTemplate.ps1`" -TemplateDirectory `"$templateDir`" -EstDirectory `"$estDir`"" -Wait -NoNewWindow
+})
+$form.Controls.Add($generateButton)
+
+# === MOVE SECTION ===
+
+# Dry Run checkbox
 $dryRunCheckbox = New-Object System.Windows.Forms.CheckBox
-$dryRunCheckbox.Text = "Dry Run (for testing purposes - no files will be moved)"
-$dryRunCheckbox.Location = New-Object System.Drawing.Point(10,80)
-$dryRunCheckbox.Size = New-Object System.Drawing.Size(500, 20)
+$dryRunCheckbox.Text = "Dry Run (for testing - no files moved)"
+$dryRunCheckbox.Location = New-Object System.Drawing.Point(10, 190)
+$dryRunCheckbox.Size = New-Object System.Drawing.Size(400, 20)
 $form.Controls.Add($dryRunCheckbox)
 
-# --- Run button
-$runButton = New-Object System.Windows.Forms.Button
-$runButton.Text = "Run Script"
-$runButton.Location = New-Object System.Drawing.Point(10,120)
-$runButton.Add_Click({
-    $templateDir = $textBox.Text
+# Move Estimates button
+$moveButton = New-Object System.Windows.Forms.Button
+$moveButton.Text = "Move Estimates"
+$moveButton.Location = New-Object System.Drawing.Point(10, 220)
+$moveButton.Size = New-Object System.Drawing.Size(150, 30)
+$moveButton.Add_Click({
+    $templateDir = $textBoxTemplate.Text
     $dryRun = $dryRunCheckbox.Checked
 
     if (-not (Test-Path $templateDir)) {
-        [System.Windows.Forms.MessageBox]::Show("Invalid directory path.", "Error", "OK", "Error")
+        [System.Windows.Forms.MessageBox]::Show("Please select a valid template directory.", "Error", "OK", "Error")
         return
     }
 
@@ -57,11 +105,9 @@ $runButton.Add_Click({
         $paramArgs += " -DryRun"
     }
 
-    # Call the main script
     Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSScriptRoot\MoveEstimates.ps1`" $paramArgs" -Wait -NoNewWindow
-    $form.Close()
 })
-$form.Controls.Add($runButton)
+$form.Controls.Add($moveButton)
 
-# --- Show the form
+# Show the form
 $form.ShowDialog()
