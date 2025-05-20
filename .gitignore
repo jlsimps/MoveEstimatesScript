@@ -1,3 +1,4 @@
 # Ignore log files and Excel templates
 *.txt
 *.xlsx
+TestWrite.ps1
