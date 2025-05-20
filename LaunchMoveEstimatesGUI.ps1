@@ -11,9 +11,9 @@ $form.StartPosition = "CenterScreen"
 
 # Template directory label
 $labelTemplate = New-Object System.Windows.Forms.Label
-$labelTemplate.Text = "Select Directory where PowerShell_Template.xlsx is located:"
+$labelTemplate.Text = "Select Directory where PowerShell_Template.xlsx is Located:"
 $labelTemplate.Location = New-Object System.Drawing.Point(10, 20)
-$labelTemplate.Size = New-Object System.Drawing.Size(200, 20)
+$labelTemplate.Size = New-Object System.Drawing.Size(350, 20)
 $form.Controls.Add($labelTemplate)
 
 # Template directory textbox
