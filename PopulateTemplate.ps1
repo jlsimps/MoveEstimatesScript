@@ -36,7 +36,7 @@ for ($row = 2; $row -le $rowCount; $row++) {
 $row = 2
 foreach ($folder in $folders) {
     $ws.Cells["A$row"].Value = $folder.Name
-    $ws.Cells["C$row"].Value = $folder.FullName
+    $ws.Cells["C$row"].Value = $EstDirectory
     $row++
 }
 
