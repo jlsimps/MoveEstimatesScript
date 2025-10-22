@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project automates the process of moving estimate directories when converting from the Standard to the Enterprise version of the estimating software. It uses PowerShell scripts and a simple GUI to help users populate a template, assign estimates to divisions, and move folders accordingly.
+This project automates the process of moving estimate directories when converting from the Standard to the Enterprise version of HeavyBid. It uses PowerShell scripts and a simple GUI to help users populate a template, assign estimates to divisions, and move folders accordingly.
 
 ## Folder Structure
 
